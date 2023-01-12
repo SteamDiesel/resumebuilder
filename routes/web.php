@@ -1,6 +1,10 @@
 <?php
 
+use App\Models\Employer;
+use App\Models\Resume;
+use App\Models\Role;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -32,4 +36,48 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+    // tinkering
+    Route::get('/tinkering', function () {
+        $user = Auth::user();
+        $employer = Employer::find(2);
+        $role = new Role([
+            'title' => 'Role Title',
+            'description' => 'Role description',
+            'start' => new dateTime('2020/10/01'),
+        ]);
+        $role->employer_id = $employer->id;
+        $role->user_id = $user->id;
+        $role->save();
+
+        $roles = $user->roles()->get();
+
+        return $roles;
+
+        // $resume->employers()->attach($employer->id);
+        // $resume->employers;
+
+        // $resume = $user->resumes()->first();
+        // $employer = new Employer([
+        //     'name' => 'First Employer',
+        //     'description' => 'description'
+        // ]);
+        // $employer->user_id = $user->id;
+        // $resume->employers()->attach($employer->id);
+        // $employer->save();
+
+
+        // dd($user->id);
+        // $resume = new Resume([
+        //     'title' => 'Third Resume',
+        // ]);
+
+        // $user->resumes()->save($resume);
+
+        // $res = $user->resumes()->get();
+
+
+
+
+    });
 });
