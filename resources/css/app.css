@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+@layer components {
+
+    .btn-primary {
+        @apply py-1 px-2 bg-gray-300 dark:bg-indigo-800 dark:text-indigo-300 hover:bg-gray-400 border dark:hover:bg-indigo-600 border-gray-500 rounded-md focus:ring-indigo-400 focus:ring-opacity-75;
+    }
+}

@@ -1,17 +1,5 @@
 <template>
 	<div class="relative grid gap-4 sm:gap-6 lg:gap-8">
-		<div class="flex h-12 absolute right-10 top-0">
-			<Spinner v-if="role.saving" />
-			<div class="mt-2 text-sm text-red-600" v-if="role.error">
-				The employer information is not saved due to the following
-				error:
-				{{ role.error.response.data.message }}
-			</div>
-			<span class="mt-2 text-sm text-green-600" v-if="role.saved"
-				>saved</span
-			>
-		</div>
-
 		<TextInput
 			label="Role title"
 			input_type="text"
@@ -36,6 +24,9 @@
 				@update:value="(newValue) => (role.end = newValue)"
 				@change="updateRole(role)"
 			/>
+			<button @click="deleteRole(role)" class="btn-primary">
+				Delete
+			</button>
 		</div>
 
 		<Textarea
@@ -55,7 +46,7 @@
 import TextInput from "../Forms/TextInput.vue";
 import Textarea from "../Forms/Textarea.vue";
 import Spinner from "../Forms/Spinner.vue";
-
+import { toast } from "vue3-toastify";
 export default {
 	components: {
 		TextInput,
@@ -66,6 +57,22 @@ export default {
 		role: Object,
 	},
 	methods: {
+		deleteRole(role) {
+			axios
+				.post("/delete_role", {
+					role: role,
+				})
+				.then((r) => {
+					console.log(r.data);
+					toast.success("Role Deleted", { autoClose: 1000 });
+					this.$emit("deleted");
+				})
+				.catch((e) => {
+					console.log(e);
+					role.error = e;
+					toast.error(e.message, { autoClose: 3000 });
+				});
+		},
 		updateRole(role) {
 			axios
 				.post("/update_role", {
@@ -73,10 +80,12 @@ export default {
 				})
 				.then((r) => {
 					console.log(r.data);
+					toast.success("Role update Saved", { autoClose: 1000 });
 				})
 				.catch((e) => {
 					console.log(e);
 					role.error = e;
+					toast.error(e.message, { autoClose: 3000 });
 				});
 		},
 	},

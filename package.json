@@ -23,6 +23,7 @@
     "dependencies": {
         "@headlessui/vue": "^1.7.7",
         "@heroicons/vue": "^2.0.13",
-        "@vue-hero-icons/solid": "^1.7.2"
+        "@vue-hero-icons/solid": "^1.7.2",
+        "vue3-toastify": "^0.0.4"
     }
 }

@@ -47,7 +47,8 @@ Route::middleware([
 
 
 
-
+    Route::post('/create_role', [RoleController::class, 'create']);
+    Route::post('/delete_role', [RoleController::class, 'delete']);
     Route::post('/update_employer', [EmployerController::class, 'update']);
     Route::post('/update_role', [RoleController::class, 'update']);
 

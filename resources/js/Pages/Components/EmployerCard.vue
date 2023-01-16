@@ -13,18 +13,6 @@
 			lg:gap-8
 		"
 	>
-		<div class="flex h-12 absolute right-10 top-0">
-			<Spinner v-if="emp.saving" />
-			<div class="mt-2 text-sm text-red-600" v-if="emp.error">
-				The employer information is not saved due to the following
-				error:
-				{{ emp.error.response.data.message }}
-			</div>
-			<span class="mt-2 text-sm text-green-600" v-if="emp.saved"
-				>saved</span
-			>
-		</div>
-
 		<TextInput
 			label="Employer Name"
 			input_type="text"
@@ -48,30 +36,67 @@
 			v-for="(role, index) in emp.roles"
 			:key="index"
 			:role="role"
+			@deleted="dropRole(index)"
 		/>
+		<div class="flex w-full justify-start pl-4">
+			<button
+				v-if="!role_loading"
+				@click.prevent="createRole"
+				class="btn-primary"
+			>
+				Add Role
+			</button>
+			<div v-else class="btn-primary cursor-wait">Add Role</div>
+		</div>
 	</div>
 </template>
 
 <script>
 import TextInput from "../Forms/TextInput.vue";
 import Textarea from "../Forms/Textarea.vue";
-import Spinner from "../Forms/Spinner.vue";
+
 import RoleCard from "./RoleCard.vue";
+import { toast } from "vue3-toastify";
 
 export default {
 	components: {
 		TextInput,
 		Textarea,
-		Spinner,
 		RoleCard,
 	},
 	props: {
 		emp: Object,
 	},
+	data() {
+		return {
+			role_loading: false,
+		};
+	},
 	methods: {
+		dropRole(ind) {
+			this.emp.roles.splice(ind, 1);
+		},
+		createRole() {
+			let id = this.emp.id;
+			console.log(id);
+			this.role_loading = true;
+			axios
+				.post("/create_role", {
+					id: id,
+				})
+				.then((r) => {
+					console.log(r.data);
+					this.emp.roles.push(r.data.role);
+					toast.success("Role Created", { autoClose: 1000 });
+					this.role_loading = false;
+				})
+				.catch((e) => {
+					console.log(e);
+					toast.error(e.message, { autoClose: 3000 });
+					this.role_loading = false;
+				});
+		},
 		updateEmployer(emp) {
-			emp.saving = true;
-			emp.saved = false;
 			axios
 				.post("/update_employer", {
 					emp: emp,
@@ -83,13 +108,11 @@ export default {
 					if (emp.error) {
 						emp.error = null;
 					}
-					emp.saving = false;
-					emp.saved = true;
+					toast.success("Role Created Saved", { autoClose: 1000 });
 				})
 				.catch((e) => {
 					console.log(e);
-					emp.error = e;
-					emp.saving = false;
+					toast.error(e.message, { autoClose: 3000 });
 				});
 		},
 	},
