@@ -17,8 +17,8 @@ class Role extends Model
     ];
 
     protected $casts = [
-        'start' => 'date',
-        'end' => 'date'
+        'start' => 'datetime:Y-m-d',
+        'end' => 'datetime:Y-m-d'
     ];
 
     public function user()

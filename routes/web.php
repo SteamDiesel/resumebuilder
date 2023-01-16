@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\EmployerController;
+use App\Http\Controllers\RoleController;
 use App\Models\Employer;
 use App\Models\Resume;
 use App\Models\Role;
@@ -33,26 +35,29 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+
+
+
+
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        $user = Auth::user();
+        $employers = Employer::where('user_id', $user->id)->with('roles')->get();
+        return Inertia::render('Dashboard', ['employers' => $employers]);
     })->name('dashboard');
+
+
+
+
+    Route::post('/update_employer', [EmployerController::class, 'update']);
+    Route::post('/update_role', [RoleController::class, 'update']);
 
     // tinkering
     Route::get('/tinkering', function () {
         $user = Auth::user();
-        $employer = Employer::find(2);
-        $role = new Role([
-            'title' => 'Role Title',
-            'description' => 'Role description',
-            'start' => new dateTime('2020/10/01'),
-        ]);
-        $role->employer_id = $employer->id;
-        $role->user_id = $user->id;
-        $role->save();
+        $employers = Employer::where('user_id', $user->id)->with('roles')->get();
 
-        $roles = $user->roles()->get();
 
-        return $roles;
+        return $employers;
 
         // $resume->employers()->attach($employer->id);
         // $resume->employers;
