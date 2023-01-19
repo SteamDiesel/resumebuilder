@@ -24,9 +24,14 @@
 				@update:value="(newValue) => (role.end = newValue)"
 				@change="updateRole(role)"
 			/>
-			<button @click="deleteRole(role)" class="btn-primary">
-				Delete
-			</button>
+            <div class="flex items-end">
+                <button v-if="!deleting_wait" @click="deleteRole(role)" class="btn-warning ">
+                    Delete
+                </button>
+                <div v-else class="btn-warning cursor-wait">
+                    Delete
+                </div>
+            </div>
 		</div>
 
 		<Textarea
@@ -55,23 +60,32 @@ export default {
 	},
 	props: {
 		role: Object,
-	},
+    },
+    data() {
+        return {
+            deleting_wait: false
+        }
+    },
 	methods: {
-		deleteRole(role) {
-			axios
+        deleteRole(role) {
+            this.deleting_wait = true;
+            if (confirm('Are you sure you want to delete this role?')) {
+                axios
 				.post("/delete_role", {
 					role: role,
 				})
 				.then((r) => {
 					console.log(r.data);
 					toast.success("Role Deleted", { autoClose: 1000 });
-					this.$emit("deleted");
+                    this.$emit("deleted");
 				})
 				.catch((e) => {
-					console.log(e);
-					role.error = e;
+                    console.log(e);
 					toast.error(e.message, { autoClose: 3000 });
+                    this.deleting_wait = false;
 				});
+            };
+            this.deleting_wait = false;
 		},
 		updateRole(role) {
 			axios

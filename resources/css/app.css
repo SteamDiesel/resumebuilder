@@ -9,4 +9,10 @@
     .btn-primary {
         @apply py-1 px-2 bg-gray-300 dark:bg-indigo-800 dark:text-indigo-300 hover:bg-gray-400 border dark:hover:bg-indigo-600 border-gray-500 rounded-md focus:ring-indigo-400 focus:ring-opacity-75;
     }
+    .btn-secondary {
+        @apply py-1 px-2 bg-gray-400 dark:bg-slate-800 dark:text-slate-300 hover:bg-gray-500 border dark:hover:bg-slate-600 border-gray-600 rounded-md focus:ring-indigo-400 focus:ring-opacity-75;
+    }
+    .btn-warning {
+        @apply py-1 px-2 bg-orange-400 dark:bg-orange-800 dark:text-orange-300 hover:bg-orange-500 border dark:hover:bg-orange-600 border-orange-600 rounded-md focus:ring-indigo-400 focus:ring-opacity-75;
+    }
 }

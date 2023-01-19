@@ -17,7 +17,17 @@
 						v-for="(emp, index) in $attrs.employers"
 						:key="index"
 						:emp="emp"
+                        @deleted="dropEmployer(index)"
 					/>
+                    <div class="flex">
+                        <button v-if="!employer_loading" @click="createEmployer" class="btn-primary">
+                            Add Employer
+                        </button>
+                        <div v-else class="btn-primary cursor-wait">
+                            Add Employer
+                        </div>
+                    </div>
+
 
 					<!-- <pre>
 
@@ -31,6 +41,7 @@
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import EmployerCard from "./Components/EmployerCard.vue";
+import { toast } from "vue3-toastify";
 
 export default {
 	components: {
@@ -38,8 +49,30 @@ export default {
 		EmployerCard,
 	},
 	data() {
-		return {};
+        return {
+            employer_loading: false
+        };
 	},
-	methods: {},
+    methods: {
+        dropEmployer(ind) {
+			this.$attrs.employers.splice(ind, 1);
+		},
+        createEmployer() {
+            this.employer_loading = true;
+			axios
+				.post("/create_employer", {})
+				.then((r) => {
+                    console.log(r.data.employer);
+                    this.$attrs.employers.push(r.data.employer)
+                    this.employer_loading = false;
+                    toast.success("New Employer Created", { autoClose: 1000 });
+				})
+				.catch((e) => {
+                    console.log(e);
+                    toast.error(e.message, { autoClose: 3000 });
+                    this.employer_loading =  false;
+				});
+		},
+	},
 };
 </script>

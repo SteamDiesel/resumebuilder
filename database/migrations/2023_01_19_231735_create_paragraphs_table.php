@@ -13,14 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('employers', function (Blueprint $table) {
+        Schema::create('paragraphs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->string('name')->default('New Employer');
-            $table->text('description')->nullable();
-            $table->date('start')->nullable();
-            $table->date('end')->nullable();
-            $table->boolean('current')->default(false);
             $table->timestamps();
         });
     }
@@ -32,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('employers');
+        Schema::dropIfExists('paragraphs');
     }
 };

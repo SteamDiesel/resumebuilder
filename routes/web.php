@@ -49,8 +49,12 @@ Route::middleware([
 
     Route::post('/create_role', [RoleController::class, 'create']);
     Route::post('/delete_role', [RoleController::class, 'delete']);
-    Route::post('/update_employer', [EmployerController::class, 'update']);
     Route::post('/update_role', [RoleController::class, 'update']);
+
+    Route::post('/create_employer', [EmployerController::class, 'create']);
+    Route::post('/update_employer', [EmployerController::class, 'update']);
+    Route::post('/employer/{employer}/delete', [EmployerController::class, 'delete']);
+
 
     // tinkering
     Route::get('/tinkering', function () {

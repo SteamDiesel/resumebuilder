@@ -10,7 +10,16 @@ class Employer extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'start',
+        'end',
+        'current',
+    ];
+
+    protected $casts = [
+        'start' => 'datetime:Y-m-d',
+        'end' => 'datetime:Y-m-d',
+        'current' => 'boolean'
     ];
 
     /**
