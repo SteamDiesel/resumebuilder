@@ -21,6 +21,8 @@ class Role extends Model
         'end' => 'datetime:Y-m-d'
     ];
 
+
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -29,5 +31,10 @@ class Role extends Model
     public function employer()
     {
         return $this->belongsTo(Employer::class);
+    }
+
+    public function paragraphs()
+    {
+        return $this->hasMany(Paragraph::class);
     }
 }

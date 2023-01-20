@@ -73,4 +73,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Role::class);
     }
+
+    public function paragraphs()
+    {
+        return $this->hasMany(Paragraph::class);
+    }
 }

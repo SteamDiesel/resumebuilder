@@ -140,7 +140,7 @@ export default {
 			console.log(id);
             this.role_loading = true;
 			axios
-				.post("/create_role", {
+				.post("/role/create", {
 					id: id,
 				})
 				.then((r) => {
@@ -157,7 +157,7 @@ export default {
 		},
 		updateEmployer(emp) {
 			axios
-				.post("/update_employer", {
+				.post("/employer/"+emp.id+"/update", {
 					emp: emp,
 					name: emp.name,
 					description: emp.description,

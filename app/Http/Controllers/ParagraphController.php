@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Paragraph;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ParagraphController extends Controller
 {
@@ -25,6 +26,8 @@ class ParagraphController extends Controller
     public function create()
     {
         //
+
+
     }
 
     /**
@@ -35,7 +38,24 @@ class ParagraphController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = (object) $request->paragraph;
+
+        if($data->body){
+            $p = new Paragraph([
+                'body' => $data->body
+            ]);
+        } else {
+            $p = new Paragraph([
+                'body' => ''
+            ]);
+        }
+        $p->user_id = Auth::id();
+        $p->role_id = $data->role_id;
+        $p->save();
+        return response()->json([
+            'paragraph' => $p,
+            'message' => 'Success'
+        ], 200);
     }
 
     /**
@@ -70,6 +90,18 @@ class ParagraphController extends Controller
     public function update(Request $request, Paragraph $paragraph)
     {
         //
+        if($paragraph->user_id == Auth::id()){
+            $paragraph->body = $request->body;
+            $paragraph->save();
+            return response()->json([
+                'paragraph' => $paragraph,
+                'message' => 'Success'
+            ], 200);
+        }
+        return response()->json([
+            'message' => 'Not Authorized'
+        ], 401);
+
     }
 
     /**
@@ -81,5 +113,14 @@ class ParagraphController extends Controller
     public function destroy(Paragraph $paragraph)
     {
         //
+        if ($paragraph->user_id == Auth::id()) {
+            $paragraph->delete();
+            return response()->json([
+                'message' => 'Success'
+            ], 200);
+        }
+        return response()->json([
+            'message' => 'Not Authorized'
+        ], 401);
     }
 }

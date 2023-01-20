@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employer;
+use App\Models\Paragraph;
 use App\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -25,23 +26,29 @@ class RoleController extends Controller
         $request->validate([
             'id' => ['integer']
         ]);
-        $user_id = Auth::user()->id;
+        $user_id = Auth::id();
         //  check that the employer belongs to the auth user
         $emp = Employer::find($request->id);
         if ($emp->user_id !== $user_id) {
             return response()->json([
-                'message' => 'failed to create new role.'
-            ], 500);
+                'message' => 'Not Authorized'
+            ], 401);
         }
         $role = new Role([
             'title' => 'New Role',
             'start' => now(),
             'end' => null
         ]);
-
         $role->employer_id = $request->id;
         $role->user_id = $user_id;
         $role->save();
+
+        $p = new Paragraph(['body'=>'']);
+        $p->user_id = $user_id;
+        $p->role_id = $role->id;
+        $p->save();
+        $role->paragraphs;
+
         return response()->json([
             'role' => $role,
             'message' => 'Success'
@@ -56,16 +63,15 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, Role $role)
     {
         $request->validate([
             'title' => ['string']
         ]);
         $data = (object) $request->role;
 
-        $role = Role::find($data->id);
         if (Auth::user()->id == $role->user_id) {
-            $role->description = $data->description;
+
             $role->title = $data->title;
             $role->start = $data->start;
             $role->end = $data->end;
@@ -88,16 +94,14 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function delete(Request $request)
+    public function destroy(Request $request, Role $role)
     {
 
-        $data = (object) $request->role;
-
-        $role = Role::find($data->id);
         if (Auth::user()->id == $role->user_id) {
+            $role->paragraphs()->delete();
             $role->delete();
             return response()->json([
-                'message' => 'Role Deleted'
+                'message' => 'Role and Paragraphs Deleted'
             ], 200);
         }
 

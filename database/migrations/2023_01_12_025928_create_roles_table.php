@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('employer_id');
             $table->string('title')->default('New Role');
-            $table->text('description')->nullable();
             $table->date('start');
             $table->date('end')->nullable();
             $table->timestamps();

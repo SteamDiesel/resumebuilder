@@ -49,17 +49,23 @@ class EmployerController extends Controller
             'end' => 'date',
         ]);
         $data = (object) $request->emp;
-        $emp = Employer::find($data->id);
-        if (Auth::user()->id == $emp->user_id) {
-            $emp->description = $data->description;
-            $emp->name = $data->name;
-            $emp->save();
+
+        if (Auth::user()->id == $employer->user_id) {
+            $employer->description = $data->description;
+            $employer->name = $data->name;
+            $employer->start = $data->start;
+            $employer->end = $data->end;
+            $employer->save();
+
             return response()->json([
-                'employer' => $emp,
+                'employer' => $employer,
                 'message' => 'success'
             ], 200);
         }
-        return "Failed";
+        return response()->json([
+
+            'message' => 'Not Authorized'
+        ], 401);
     }
     /**
      * delete the specified resource in storage.
@@ -77,6 +83,8 @@ class EmployerController extends Controller
                 'message' => 'success'
             ], 200);
         }
-        return "Failed";
+        return response()->json([
+            'message' => 'Not Authorized'
+        ], 401);
     }
 }

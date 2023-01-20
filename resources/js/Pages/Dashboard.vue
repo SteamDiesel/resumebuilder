@@ -60,7 +60,7 @@ export default {
         createEmployer() {
             this.employer_loading = true;
 			axios
-				.post("/create_employer", {})
+				.post("/employer/create", {})
 				.then((r) => {
                     console.log(r.data.employer);
                     this.$attrs.employers.push(r.data.employer)

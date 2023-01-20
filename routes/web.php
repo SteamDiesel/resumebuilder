@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ParagraphController;
 use App\Models\Employer;
 use App\Models\Resume;
 use App\Models\Role;
@@ -41,18 +42,23 @@ Route::middleware([
 
     Route::get('/dashboard', function () {
         $user = Auth::user();
-        $employers = Employer::where('user_id', $user->id)->with('roles')->get();
+        $employers = Employer::where('user_id', $user->id)->with('roles.paragraphs')->get();
         return Inertia::render('Dashboard', ['employers' => $employers]);
     })->name('dashboard');
 
 
 
-    Route::post('/create_role', [RoleController::class, 'create']);
-    Route::post('/delete_role', [RoleController::class, 'delete']);
-    Route::post('/update_role', [RoleController::class, 'update']);
+    Route::post('/paragraph/create', [ParagraphController::class, 'store']);
+    Route::post('/paragraph/{paragraph}/update', [ParagraphController::class, 'update']);
+    Route::post('/paragraph/{paragraph}/delete', [ParagraphController::class, 'destroy']);
 
-    Route::post('/create_employer', [EmployerController::class, 'create']);
-    Route::post('/update_employer', [EmployerController::class, 'update']);
+
+    Route::post('/role/create', [RoleController::class, 'create']);
+    Route::post('/role/{role}/delete', [RoleController::class, 'destroy']);
+    Route::post('/role/{role}/update', [RoleController::class, 'update']);
+
+    Route::post('/employer/create', [EmployerController::class, 'create']);
+    Route::post('/employer/{employer}/update', [EmployerController::class, 'update']);
     Route::post('/employer/{employer}/delete', [EmployerController::class, 'delete']);
 
 
