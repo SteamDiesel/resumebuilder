@@ -42,7 +42,7 @@ Route::middleware([
 
     Route::get('/dashboard', function () {
         $user = Auth::user();
-        $employers = Employer::where('user_id', $user->id)->with('roles.paragraphs')->get();
+        $employers = Employer::where('user_id', $user->id)->with('roles')->get();
         return Inertia::render('Dashboard', ['employers' => $employers]);
     })->name('dashboard');
 
@@ -65,10 +65,10 @@ Route::middleware([
     // tinkering
     Route::get('/tinkering', function () {
         $user = Auth::user();
-        $employers = Employer::where('user_id', $user->id)->with('roles')->get();
+        $role = Role::find(2);
+        $role->paragraph_order;
 
-
-        return $employers;
+        return $role;
 
         // $resume->employers()->attach($employer->id);
         // $resume->employers;

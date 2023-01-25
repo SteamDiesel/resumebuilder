@@ -35,7 +35,7 @@
 		</div>
         <div id="derp">
             <ParagraphArea>
-                <Paragraph @keydown.enter="newParagraph(index)" @keydown.backspace="deleteParagraph(index)" v-for="(p, index) in role.paragraphs" :reference="'r'+role.id+'p'+index" :paragraph="p" :key="index"/>
+                <Paragraph @keydown.enter="newParagraph(index)" @keydown.backspace="deleteParagraph(index)" v-for="(p, index) in role.paragraph_order" :reference="'r'+role.id+'p'+index" :paragraph="p" :key="index"/>
             </ParagraphArea>
         </div>
 

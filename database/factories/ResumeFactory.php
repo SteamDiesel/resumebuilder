@@ -17,7 +17,7 @@ class ResumeFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'title' => 'New Resume' & $this->faker->jobTitle()
         ];
     }
 }

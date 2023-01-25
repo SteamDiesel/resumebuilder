@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
 class Role extends Model
 {
     use HasFactory;
@@ -12,14 +14,16 @@ class Role extends Model
     protected $fillable = [
         'title',
         'description',
+        'paragraph_order',
         'start',
         'end',
     ];
 
     protected $casts = [
         'start' => 'datetime:Y-m-d',
-        'end' => 'datetime:Y-m-d'
+        'end' => 'datetime:Y-m-d',
     ];
+    // 'paragraph_order' => 'array'
 
 
 
@@ -33,8 +37,24 @@ class Role extends Model
         return $this->belongsTo(Employer::class);
     }
 
-    public function paragraphs()
+    /**
+     * Get the role's paragraphs in order as they appear in the paragraph_order column.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function paragraphOrder(): Attribute
     {
-        return $this->hasMany(Paragraph::class);
+        // $getParagraphs = function($e){
+        //     foreach(json_decode($e) as $id){
+        //         Paragraph::find($id)
+        //     }
+        // }
+        return Attribute::make(
+            get: fn ($value) => ($value == '[]') ? [] : Paragraph::whereIn('id',json_decode($value))->orderByRaw("FIELD(id," .
+            implode(',', json_decode($value)) .
+            ")")->get(),
+            set: fn ($value) => dd($value)
+        );
     }
+
 }

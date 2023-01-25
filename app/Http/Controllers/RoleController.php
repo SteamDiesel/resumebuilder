@@ -34,6 +34,14 @@ class RoleController extends Controller
                 'message' => 'Not Authorized'
             ], 401);
         }
+
+        $p = new Paragraph(['body'=>'']);
+        $p->user_id = $user_id;
+        $p->save();
+
+        $array_of_paragraphs = [];
+        array_push($array_of_paragraphs, $p);
+
         $role = new Role([
             'title' => 'New Role',
             'start' => now(),
@@ -41,14 +49,12 @@ class RoleController extends Controller
         ]);
         $role->employer_id = $request->id;
         $role->user_id = $user_id;
+        $role->paragraph_order = $array_of_paragraphs;
+        dd($array_of_paragraphs);
         $role->save();
 
-        $p = new Paragraph(['body'=>'']);
-        $p->user_id = $user_id;
-        $p->role_id = $role->id;
-        $p->save();
-        $role->paragraphs;
-
+        // $role->paragraphs = Paragraph::where('id', $role->paragraph_order)->get();
+        // $role->save();
         return response()->json([
             'role' => $role,
             'message' => 'Success'
@@ -73,6 +79,7 @@ class RoleController extends Controller
         if (Auth::user()->id == $role->user_id) {
 
             $role->title = $data->title;
+            $role->paragraph_order = $data->paragraph_order;
             $role->start = $data->start;
             $role->end = $data->end;
 

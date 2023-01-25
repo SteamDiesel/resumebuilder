@@ -21,13 +21,4 @@ class Paragraph extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the role that contains the paragraph.
-     */
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
-
-
 }

@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Resume;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ResumeSeeder extends Seeder
+class ParagraphSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,7 +15,5 @@ class ResumeSeeder extends Seeder
     public function run()
     {
         //
-
-        
     }
 }

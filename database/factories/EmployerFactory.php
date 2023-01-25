@@ -17,7 +17,10 @@ class EmployerFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->company(),
+            'description' => $this->faker->realText(),
+            'start' => $this->faker->date(),
+            'end' => $this->faker->date(),
         ];
     }
 }
